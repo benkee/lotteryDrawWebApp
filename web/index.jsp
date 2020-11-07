@@ -9,12 +9,13 @@
 <html>
   <head>
     <title>Home</title>
+    <script> src="/InputValidation.js"</script>
   </head>
   <body>
 
   <h1>Home Page</h1>
 
-  <form action="CreateAccount" method="post">
+  <form action="CreateAccount" name="createaccount" method="post">
       <label for="firstname">First name:</label><br>
       <input type="text" id="firstname" name="firstname"><br>
       <label for="lastname">Last name:</label><br>
@@ -22,13 +23,12 @@
       <label for="username">Username:</label><br>
       <input type="text" id="username" name="username"><br>
       <label for="phone">Phone Number:</label><br>
-      <input type="number" id="phone" name="phone"  value="44-0191-1234567"><br>
+      <input type="number" id="phone" name="phone"  placeholder="44-0191-1234567"><br>
       <label for="email">Email:</label><br>
-      <input type="email" id="email" name="email"  value="joebloggs@email.com"><br>
+      <input type="email" id="email" name="email"  placeholder="joebloggs@email.com"><br>
       <label for="password">Password:</label><br>
-      <input type="password" id="password" name="password"  value="Password123"><br>
+      <input type="password" id="password" name="password"  placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"><br>
       <input type="submit" value="Submit">
   </form>
-
   </body>
 </html>
