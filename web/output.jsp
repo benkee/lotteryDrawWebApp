@@ -16,8 +16,9 @@
 
 <div>
     <%= request.getAttribute("data") %>
-</div>
 
+</div>
+<output>Login Successful</output>
 <div>
     <a href="index.jsp">Home Page</a>
 </div>

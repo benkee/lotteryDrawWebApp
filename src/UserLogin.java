@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 
 
 @WebServlet("/UserLogin")
@@ -39,12 +40,14 @@ public class UserLogin extends HttpServlet {
 
             // query database and get results
             ResultSet rs = stmt.executeQuery("SELECT * FROM userAccounts");
-
             // create HTML table text
             String content = "<table border='1' cellspacing='2' cellpadding='2' width='100%' align='left'>" +
                     "<tr><th>First name</th><th>Last name</th><th>Email</th><th>Phone number</th><th>Username</th><th>Password</th></tr>";
 
             // add HTML table data using data from database
+            ArrayList<String> Usernames = new ArrayList<String>();
+            ArrayList<String> Passwords = new ArrayList<String>();
+
             while (rs.next()) {
                 content += "<tr><td>"+ rs.getString("Firstname") + "</td>" +
                         "<td>" + rs.getString("Lastname") + "</td>" +
@@ -52,17 +55,34 @@ public class UserLogin extends HttpServlet {
                         "<td>" + rs.getString("Phone") + "</td>" +
                         "<td>" + rs.getString("Username") + "</td>" +
                         "<td>" + rs.getString("Pwd") + "</td></tr>";
+                Usernames.add(rs.getString("Username"));
+                Passwords.add(rs.getString("Pwd"));
             }
             // finish HTML table text
             content += "</table>";
 
+            String[] usernameLog = request.getParameterValues("usernameLog");
+            String[] passwordLog = request.getParameterValues("passwordLog");
+            Boolean Access = false;
+            for (int i = 0; i<Usernames.size();i++){
+                if (usernameLog[0].equals(Usernames.get(i)) && passwordLog[0].equals(Passwords.get(i))){
+                        Access = true;
+                    }
+                }
             // close connection
             conn.close();
-
             // display output.jsp page with given content above if successful
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/output.jsp");
-            request.setAttribute("data", content);
-            dispatcher.forward(request, response);
+            if (Access){
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/output.jsp");
+                request.setAttribute("data", content);
+                dispatcher.forward(request, response);
+            }else{
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
+                request.setAttribute("message", "Login Unsuccessful");
+                dispatcher.forward(request,response);
+            }
+
+
 
 
         } catch (Exception se) {
