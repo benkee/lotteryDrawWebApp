@@ -19,17 +19,9 @@
         form div {
             margin-bottom: 10px;
         }
-        .error {
-            color: red;
-            margin-left: 5px;
-        }
-
-        label.error {
-            display: inline;
-        }
         </style>
     <script type="text/javascript">
-    function validateForm(){
+    function validateAccountForm(){
         var fname = document.forms["createaccount"][0].value;
         var lname = document.forms["createaccount"][1].value;
         var username = document.forms["createaccount"][2].value;
@@ -57,23 +49,46 @@
             alert("Invalid username, must be letters/numbers/.-_ only");
             return false;
         }
-        var REGEX = /[(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])]{8,15}$/;
+        var REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
         var regtest = new RegExp(REGEX)
         var result = regtest.test(password);
         if (result == false){
-            alert("Invalid password, must be letters/numbers only, between 8 and 15 characters with at least" +
+            alert("Invalid password, must be between 8 and 15 characters with at least" +
                 " 1 uppercase and 1 lowercase character and 1 digit");
             return false;
         }
-
+        var REGEX = /[^([\d]{2}(-)[\d]{4}(-)[\d]{6}$/;
+        var regtest = new RegExp(REGEX)
+        var result = regtest.test(phone);
+        if (result == false){
+            alert("Invalid phone number, must in format xx-xxxx-xxxxxxx");
+            return false;
+        }
+        var REGEX = /\A[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z/;
+        var regtest = new RegExp(REGEX);
+        var result = regtest.test(email);
+        if (result == false){
+            alert("Invalid email, must be a valid email address");
+            return false;
+        }
+    }
+    function validateLoginForm() {
+        alert("login");
     }
     </script>
 </head>
 <body>
-
 <h1>Home Page</h1>
-
-<form name="createaccount" onsubmit="return validateForm()" method="post" action="CreateAccount" >
+<h2>Login:</h2>
+<form name="login" onsubmit="validateLoginForm()" method="post" action="UserLogin">
+    <label for="username">Username:</label><br>
+    <input type="text" id="usernameLog" name="username"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="passwordLog" name="password"  placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"><br>
+    <input type="submit" value="Submit">
+</form>
+<h2>Register:</h2>
+<form name="createaccount" onsubmit="return validateAccountForm()" method="post" action="CreateAccount" >
     <label for="firstname">First name:</label><br>
     <input type="text" id="firstname" name="firstname"><br>
     <label for="lastname">Last name:</label><br>

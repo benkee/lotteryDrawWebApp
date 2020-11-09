@@ -21,7 +21,7 @@
         }
         </style>
     <script type="text/javascript">
-    function validateForm(){
+    function validateAccountForm(){
         var fname = document.forms["createaccount"][0].value;
         var lname = document.forms["createaccount"][1].value;
         var username = document.forms["createaccount"][2].value;
@@ -72,13 +72,39 @@
             return false;
         }
     }
+    function validateLoginForm() {
+        var username = document.forms["login"][2].value;
+        var password = document.forms["login"][3].value;
+        var REGEX = /^[a-zA-Z0-9.-_]+$/;
+        var regtest = new RegExp(REGEX)
+        var result = regtest.test(username);
+        if (result == false){
+            alert("Invalid username, must be letters/numbers/.-_ only");
+            return false;
+        }
+        var REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
+        var regtest = new RegExp(REGEX)
+        var result = regtest.test(password);
+        if (result == false){
+            alert("Invalid password, must be between 8 and 15 characters with at least" +
+                " 1 uppercase and 1 lowercase character and 1 digit");
+            return false;
+        }
+    }
     </script>
 </head>
 <body>
-
 <h1>Home Page</h1>
+<h2>Login:</h2>
+<form name="login" onsubmit="validateLoginForm()" method="post" action="UserLogin">
+    <label for="username">Username:</label><br>
+    <input type="text" id="usernameLog" name="username"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="passwordLog" name="password"  placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"><br>
+    <input type="submit" value="Submit">
+</form>
 <h2>Register:</h2>
-<form name="createaccount" onsubmit="return validateForm()" method="post" action="CreateAccount" >
+<form name="createaccount" onsubmit="return validateAccountForm()" method="post" action="CreateAccount" >
     <label for="firstname">First name:</label><br>
     <input type="text" id="firstname" name="firstname"><br>
     <label for="lastname">Last name:</label><br>
