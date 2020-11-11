@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
 
 @WebServlet("/CreateAccount")
@@ -41,15 +43,18 @@ public class CreateAccount extends HttpServlet {
         String password = request.getParameter("password");
 
         try{
+            HashPassword.hashPassword(password);
+            String hashedPassword = HashPassword.getHashedPassword();
+            String salt = HashPassword.getSalt();
             // create database connection and statement
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // Create sql query
-            String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd)"
-                    + " VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd, Salt)"
+                    + " VALUES (?, ?, ?, ?, ?, ?,?)";
 
-
+            System.out.println("Adding");
             // set values into SQL query statement
             stmt = conn.prepareStatement(query);
             stmt.setString(1,firstname);
@@ -57,10 +62,12 @@ public class CreateAccount extends HttpServlet {
             stmt.setString(3,email);
             stmt.setString(4,phone);
             stmt.setString(5,username);
-            stmt.setString(6,password);
+            stmt.setString(6,hashedPassword);
+            stmt.setString(7,salt);
 
             // execute query and close connection
             stmt.execute();
+            System.out.println("Added");
             conn.close();
 
             // display account.jsp page with given message if successful

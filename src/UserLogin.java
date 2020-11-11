@@ -54,7 +54,8 @@ public class UserLogin extends HttpServlet {
                         "<td>" + rs.getString("Email") + "</td>" +
                         "<td>" + rs.getString("Phone") + "</td>" +
                         "<td>" + rs.getString("Username") + "</td>" +
-                        "<td>" + rs.getString("Pwd") + "</td></tr>";
+                        "<td>" + rs.getString("Pwd") + "</td>" +
+                        "<td>" + rs.getString("Salt") + "</td></tr>";
                 Usernames.add(rs.getString("Username"));
                 Passwords.add(rs.getString("Pwd"));
             }
@@ -63,11 +64,12 @@ public class UserLogin extends HttpServlet {
 
             String[] usernameLog = request.getParameterValues("usernameLog");
             String[] passwordLog = request.getParameterValues("passwordLog");
-            Boolean Access = false;
+            boolean Access = false;
             for (int i = 0; i<Usernames.size();i++){
-                if (usernameLog[0].equals(Usernames.get(i)) && passwordLog[0].equals(Passwords.get(i))){
-                        Access = true;
-                    }
+                if (usernameLog[0].equals(Usernames.get(i)) && passwordLog[0].equals(Passwords.get(i))) {
+                    Access = true;
+                    break;
+                }
                 }
             // close connection
             conn.close();

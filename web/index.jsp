@@ -28,64 +28,68 @@
         var password = document.forms["createaccount"][3].value;
         var phone = document.forms["createaccount"][4].value;
         var email = document.forms["createaccount"][5].value;
-        var REGEX = /^[a-zA-Z]+$/;
+        var REGEX;
+        var result;
+        REGEX = /^[a-zA-Z]+$/;
         var regtest = new RegExp(REGEX)
-        var result = regtest.test(fname);
-        if (result == false){
+        result = regtest.test(fname);
+        if (result === false){
             alert("Invalid first name, must be letters only");
             return false;
         }
-        var REGEX = /^[a-zA-Z]+$/;
+        REGEX = /^[a-zA-Z]+$/;
         var regtest = new RegExp(REGEX)
-        var result = regtest.test(lname);
-        if (result == false){
+        result = regtest.test(lname);
+        if (result === false){
             alert("Invalid last name, must be letters only");
             return false;
         }
-        var REGEX = /^[a-zA-Z0-9.-_]+$/;
+        REGEX = /^[a-zA-Z0-9.-_]+$/;
         var regtest = new RegExp(REGEX)
-        var result = regtest.test(username);
-        if (result == false){
+        result = regtest.test(username);
+        if (result === false){
             alert("Invalid username, must be letters/numbers/.-_ only");
             return false;
         }
-        var REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
-        var regtest = new RegExp(REGEX)
-        var result = regtest.test(password);
-        if (result == false){
-            alert("Invalid password, must be between 8 and 15 characters with at least" +
-                " 1 uppercase and 1 lowercase character and 1 digit");
-            return false;
-        }
-        var REGEX = /[^([\d]{2}(-)[\d]{4}(-)[\d]{6}$/;
-        var regtest = new RegExp(REGEX)
-        var result = regtest.test(phone);
-        if (result == false){
-            alert("Invalid phone number, must in format xx-xxxx-xxxxxxx");
-            return false;
-        }
-        var REGEX = /\A[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z/;
-        var regtest = new RegExp(REGEX);
-        var result = regtest.test(email);
-        if (result == false){
-            alert("Invalid email, must be a valid email address");
-            return false;
-        }
+        //REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
+        //var regtest = new RegExp(REGEX)
+        //result = regtest.test(password);
+        //if (result === false){
+        //    alert("Invalid password, must be between 8 and 15 characters with at least" +
+        //        " 1 uppercase and 1 lowercase character and 1 digit");
+        //    return false;
+        //}
+        //REGEX = /^([\d]{2}(-)[\d]{4}(-)[\d]{6})$/;
+        //var regtest = new RegExp(REGEX)
+        //result = regtest.test(phone);
+        //if (result === false){
+        //    alert("Invalid phone number, must in format xx-xxxx-xxxxxxx");
+        //    return false;
+        //}
+        //REGEX = /\A[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z/;
+        //var regtest = new RegExp(REGEX);
+        //result = regtest.test(email);
+        //if (result === false){
+        //    alert("Invalid email, must be a valid email address");
+        //    return false;
+        //}
     }
     function validateLoginForm() {
+        var REGEX;
+        var result;
         var username = document.forms["login"][0].value;
         var password = document.forms["login"][1].value;
-        var REGEX = /^[a-zA-Z0-9.-_]+$/;
+        REGEX = /^[a-zA-Z0-9.-_]+$/;
         var regtest = new RegExp(REGEX)
-        var result = regtest.test(username);
-        if (result == false){
+        result = regtest.test(username);
+        if (result === false){
             alert("Invalid username, must be letters/numbers/.-_ only");
             return false;
         }
-        var REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
+        REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
         var regtest = new RegExp(REGEX)
-        var result = regtest.test(password);
-        if (result == false){
+        result = regtest.test(password);
+        if (result === false){
             alert("Invalid password, must be between 8 and 15 characters with at least" +
                 " 1 uppercase and 1 lowercase character and 1 digit");
             return false;
@@ -96,7 +100,7 @@
 <body>
 <h1>Home Page</h1>
 <h2>Login:</h2>
-<form name="login" onsubmit="validateLoginForm()" method="post" action="UserLogin">
+<form name="login" onsubmit="return validateLoginForm()" method="post" action="UserLogin">
     <label for="username">Username:</label><br>
     <input type="text" id="usernameLog" name="usernameLog"><br>
     <label for="password">Password:</label><br>
@@ -112,7 +116,7 @@
     <label for="username">Username:</label><br>
     <input type="text" id="username" name="username"><br>
     <label for="phone">Phone Number:</label><br>
-    <input type="number" id="phone" name="phone"  placeholder="44-0191-1234567"><br>
+    <input type="text" id="phone" name="phone"  placeholder="44-0191-1234567"><br>
     <label for="email">Email:</label><br>
     <input type="email" id="email" name="email"  placeholder="joebloggs@email.com"><br>
     <label for="password">Password:</label><br>
