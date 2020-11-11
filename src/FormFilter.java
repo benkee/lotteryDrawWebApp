@@ -20,31 +20,29 @@ public class FormFilter implements Filter {
         Map params = request.getParameterMap();
 
         if(params != null){
-            Iterator iter = params.keySet().iterator();
-            while(iter.hasNext()){
-                String key = (String) iter.next();
+            for (Object o : params.keySet()) {
+                String key = (String) o;
                 String[] values = (String[]) params.get(key);
 
-                for(int i=0; i < values.length; i++){
-                    if(checkChars(values[i])){
+                for (String value : values) {
+                    if (checkChars(value)) {
                         invalid = true;
                         break;
                     }
                 }
                 if (invalid) {
-                 try{
-                     RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
-                     request.setAttribute("message", "Special characters / Keywords like <, >, drop, insert, " +
-                             "script, alert, null, truncate, delete, xp_, ,<>, !, {, } are not allowed as input");
-                     dispatcher.forward(request,response);
-                }
-                catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                }
-                else{
+                    try {
+                        RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
+                        request.setAttribute("message", "Special characters / Keywords like <, >, drop, insert, " +
+                                "script, alert, null, truncate, delete, xp_, ,<>, !, {, } are not allowed as input");
+                        dispatcher.forward(request, response);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
                     chain.doFilter(request, response);
-                }}
+                }
+            }
             }
         chain.doFilter(request, response);
         }
@@ -57,8 +55,8 @@ public class FormFilter implements Filter {
                 "insert", "drop", "null", "xp_", "<>", "!", "{", "}", "`",
                 "input", "into", "where"};
 
-        for(int i = 0; i < badChars.length; i++){
-            if(value.indexOf(badChars[i]) >=0){
+        for (String badChar : badChars) {
+            if (value.contains(badChar)) {
                 invalid = true;
                 break;
             }
