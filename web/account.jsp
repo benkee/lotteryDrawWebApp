@@ -63,6 +63,7 @@
         <button type="submit" value="Submit">Submit</button>
     </form>
     <button onclick="generateNumbers()">Lucky Dip</button>
+    <form name="getDraws" method="post" action="GetUserNumbers"></form>
 </div>
 <a href="index.jsp">Home Page</a>
 
