@@ -16,7 +16,7 @@ public class CreateAccount extends HttpServlet {
     private PreparedStatement stmt;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        System.out.println("CA called");
         // MySql database connection info
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "user";
