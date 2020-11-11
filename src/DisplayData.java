@@ -9,15 +9,14 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
-
-@WebServlet("/UserLogin")
-public class UserLogin extends HttpServlet {
+@WebServlet("/DisplayData")
+public class DisplayData extends HttpServlet {
 
     private Connection conn;
     private Statement stmt;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("UL doPost");
+        System.out.println("DD doPost");
         HttpSession session = request.getSession();
         //access current http session
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -45,52 +44,31 @@ public class UserLogin extends HttpServlet {
             // query database and get results
             ResultSet rs = stmt.executeQuery("SELECT * FROM userAccounts");
 
+            // create HTML table text
+            String content = "<table border='1' cellspacing='2' cellpadding='2' width='100%' align='left'>" +
+                    "<tr><th>First name</th><th>Last name</th><th>Email</th><th>Phone number</th><th>Username</th><th>Password</th></tr>";
+
             // add HTML table data using data from database
-            ArrayList<String> Usernames = new ArrayList<String>();
-            ArrayList<String> Passwords = new ArrayList<String>();
-            ArrayList<String> Salts = new ArrayList<String>();
-            ArrayList<String> Firstnames = new ArrayList<String>();
-            ArrayList<String> Lastnames = new ArrayList<String>();
-            ArrayList<String> Emails = new ArrayList<String>();
 
             while (rs.next()) {
-                Usernames.add(rs.getString("Username"));
-                Passwords.add(rs.getString("Pwd"));
-                Salts.add(rs.getString("Salt"));
-                Firstnames.add(rs.getString("Firstname"));
-                Lastnames.add(rs.getString("Lastname"));
-                Emails.add(rs.getString("Email"));
+                content += "<tr><td>"+ rs.getString("Firstname") + "</td>" +
+                        "<td>" + rs.getString("Lastname") + "</td>" +
+                        "<td>" + rs.getString("Email") + "</td>" +
+                        "<td>" + rs.getString("Phone") + "</td>" +
+                        "<td>" + rs.getString("Username") + "</td>" +
+                        "<td>" + rs.getString("Pwd") + "</td>" +
+                        "<td>" + rs.getString("Salt") + "</td></tr>";
             }
+            // finish HTML table text
+            content += "</table>";
 
-            String[] usernameLog = request.getParameterValues("usernameLog");
-            String[] passwordLog = request.getParameterValues("passwordLog");
-            boolean Access = false;
-            for (int i = 0; i<Usernames.size();i++){
-                if (usernameLog[0].equals(Usernames.get(i))) {
-                    Access = HashPassword.checkPassword(passwordLog[0], Passwords.get(i), Salts.get(i));
-                    session.setAttribute("firstname", Firstnames.get(i));
-                    session.setAttribute("lastname",Lastnames.get(i));
-                    session.setAttribute("username",Usernames.get(i));
-                    session.setAttribute("email",Emails.get(i));
-                    break;
-                }
-            }
             // close connection
             conn.close();
             // display output.jsp page with given content above if successful
-            if (Access){
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
-                request.setAttribute("message","Login Successful");
-                request.setAttribute("firstname",session.getAttribute("firstname"));
-                request.setAttribute("lastname",session.getAttribute("lastname"));
-                request.setAttribute("username",session.getAttribute("username"));
-                request.setAttribute("email",session.getAttribute("email"));
-                dispatcher.forward(request, response);
-            }else{
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
-                request.setAttribute("message", "Login Unsuccessful");
-                dispatcher.forward(request,response);
-            }
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/output.jsp");
+            request.setAttribute("data", content);
+            dispatcher.forward(request, response);
 
         } catch (Exception se) {
             se.printStackTrace();
@@ -113,7 +91,8 @@ public class UserLogin extends HttpServlet {
         }
     }
 
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+
     }
 }

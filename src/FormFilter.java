@@ -15,7 +15,7 @@ public class FormFilter implements Filter {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-
+        System.out.println("Filtering");
         boolean invalid = false;
         Map params = request.getParameterMap();
 
@@ -44,7 +44,7 @@ public class FormFilter implements Filter {
                 }
             }
             }
-        chain.doFilter(request, response);
+        chain.doFilter(request,response);
         }
 
 

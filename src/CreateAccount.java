@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -15,8 +16,10 @@ public class CreateAccount extends HttpServlet {
     private Connection conn;
     private PreparedStatement stmt;
 
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("CA called");
+        HttpSession session = request.getSession();
+        System.out.println("CA doPost");
         // MySql database connection info
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "user";
@@ -42,10 +45,22 @@ public class CreateAccount extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        try{
+        try {
             HashPassword.hashPassword(password);
-            String hashedPassword = HashPassword.getHashedPassword();
-            String salt = HashPassword.getSalt();
+        } catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+        String hashedPassword = HashPassword.getHashedPassword();
+        String salt = HashPassword.getSalt();
+
+        session.setAttribute("firstname", firstname);
+        session.setAttribute("lastname",lastname);
+        session.setAttribute("username",username);
+        session.setAttribute("email",email);
+        session.setAttribute("hashedPassword",hashedPassword);
+        session.setAttribute("salt",salt);
+
+        try{
             // create database connection and statement
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
@@ -67,12 +82,15 @@ public class CreateAccount extends HttpServlet {
 
             // execute query and close connection
             stmt.execute();
-            System.out.println("Added");
             conn.close();
 
             // display account.jsp page with given message if successful
             RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
-            request.setAttribute("message", firstname+", you have successfully created an account");
+            request.setAttribute("message", firstname + ", you have successfully created an account");
+            request.setAttribute("firstname",session.getAttribute("firstname"));
+            request.setAttribute("lastname",session.getAttribute("lastname"));
+            request.setAttribute("username",session.getAttribute("username"));
+            request.setAttribute("email",session.getAttribute("email"));
             dispatcher.forward(request, response);
 
         } catch(Exception se){
