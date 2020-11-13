@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -19,6 +21,11 @@ public class UserLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("UL doPost");
         HttpSession session = request.getSession();
+        session.removeAttribute("firstname");
+        session.removeAttribute("lastname");
+        session.removeAttribute("username");
+        session.removeAttribute("email");
+        session.removeAttribute("hashedPassword");
         //access current http session
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "user";
@@ -72,6 +79,7 @@ public class UserLogin extends HttpServlet {
                     session.setAttribute("lastname",Lastnames.get(i));
                     session.setAttribute("username",Usernames.get(i));
                     session.setAttribute("email",Emails.get(i));
+                    session.setAttribute("hashedPassword", Passwords.get(i));
                     break;
                 }
             }
@@ -81,10 +89,6 @@ public class UserLogin extends HttpServlet {
             if (Access){
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                 request.setAttribute("message","Login Successful");
-                request.setAttribute("firstname",session.getAttribute("firstname"));
-                request.setAttribute("lastname",session.getAttribute("lastname"));
-                request.setAttribute("username",session.getAttribute("username"));
-                request.setAttribute("email",session.getAttribute("email"));
                 dispatcher.forward(request, response);
             }else{
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
@@ -103,6 +107,7 @@ public class UserLogin extends HttpServlet {
                 if (stmt != null)
                     stmt.close();
             } catch (SQLException se2) {
+                se2.printStackTrace();
             }
             try {
                 if (conn != null)

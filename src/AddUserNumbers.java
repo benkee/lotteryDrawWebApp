@@ -1,11 +1,18 @@
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 @WebServlet("/AddUserNumbers")
 public class AddUserNumbers extends HttpServlet {
@@ -20,14 +27,30 @@ public class AddUserNumbers extends HttpServlet {
         String plaintext = numbers;
         try {
             EncryptDecrypt ED = new EncryptDecrypt();
-            System.out.println(plaintext);
-            byte[] ciphertext = ED.encryptText(plaintext);
-            System.out.println(EncryptDecrypt.keyToNum(ciphertext).toString()+"'");
-            String decrypttext = new String(ED.decryptText(ciphertext));
-            System.out.println(decrypttext);
+            KeyPair kp = ED.getKeyPair();
+            session.setAttribute("KeyPair", kp);
+            PublicKey pubKey = kp.getPublic();
+            byte[] ciphertext = ED.encryptText(plaintext, pubKey);
+            System.out.println(ciphertext.length);
+            String hp = (String) session.getAttribute("hashedPassword");
+            try {
+                File dir = new File("CWLotteryWebApp");
+                dir.mkdir();
+                File file = new File(dir, hp.substring(0, 19));
+                file.createNewFile();
+                FileOutputStream stream = new FileOutputStream(new File(dir,hp.substring(0, 19)),true);
+                stream.write(ciphertext);
+                stream.flush();
+                stream.close();
+            } catch (IOException ex) {
+                System.out.println("Failed to create/write to file");
+            }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
+        request.setAttribute("message","Successfully Submitted Draw");
+        dispatcher.forward(request,response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }

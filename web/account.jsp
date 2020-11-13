@@ -36,14 +36,13 @@
 </head>
 <body>
 <h1>User Account</h1>
-
 <p><%= request.getAttribute("message") %></p>
 <h1>User Details</h1>
 <div>
-    <output>Firstname: </output><%= request.getAttribute("firstname") %><br>
-    <output>Lastname: </output><%= request.getAttribute("lastname") %><br>
-    <output>Username: </output><%= request.getAttribute("username") %><br>
-    <output>Email: </output><%= request.getAttribute("email") %><br>
+    <output>Firstname: </output><%= session.getAttribute("firstname") %><br>
+    <output>Lastname: </output><%= session.getAttribute("lastname") %><br>
+    <output>Username: </output><%= session.getAttribute("username") %><br>
+    <output>Email: </output><%= session.getAttribute("email") %><br>
 </div>
 <h2>Select New Lottery Draw</h2>
 <div>
@@ -62,10 +61,17 @@
         <input type="number" id="nu6" name="nu6" min="0" max="60"><br>
         <button type="submit" value="Submit">Submit</button>
     </form>
-    <button onclick="generateNumbers()">Lucky Dip</button>
-    <form name="getDraws" method="post" action="GetUserNumbers"></form>
+    <button onclick="generateNumbers()">Lucky Dip</button><br>
+    <form name="getDraws" method="post" action="GetUserNumbers">
+        <button type="submit" value="Submit">Get Draws</button>
+    </form>
+</div>
+<div>
+    <p>
+        <%=request.getAttribute("title")%>
+        <%=request.getAttribute("draws")%>
+    </p>
 </div>
 <a href="index.jsp">Home Page</a>
-
 </body>
 </html>
