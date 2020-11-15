@@ -104,6 +104,13 @@
 </head>
 <body>
 <h1>Home Page</h1>
+<div>
+        <%
+        if(request.getAttribute("message")!=null){
+        %>
+            <%= request.getAttribute("message") %><br>
+        <%}%>
+<div/>
 <h2>Login:</h2>
 <form name="login" onsubmit="return validateLoginForm()" method="post" action="UserLogin">
     <label for="usernameLog">Username:</label><br>

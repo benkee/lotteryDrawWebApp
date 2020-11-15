@@ -55,9 +55,7 @@ public class DisplayData extends HttpServlet {
                         "<td>" + rs.getString("Lastname") + "</td>" +
                         "<td>" + rs.getString("Email") + "</td>" +
                         "<td>" + rs.getString("Phone") + "</td>" +
-                        "<td>" + rs.getString("Username") + "</td>" +
-                        "<td>" + rs.getString("Pwd") + "</td>" +
-                        "<td>" + rs.getString("Salt") + "</td></tr>";
+                        "<td>" + rs.getString("Username") + "</td></tr";
             }
             // finish HTML table text
             content += "</table>";
@@ -67,7 +65,7 @@ public class DisplayData extends HttpServlet {
             // display output.jsp page with given content above if successful
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("/output.jsp");
-            request.setAttribute("data", content);
+            request.setAttribute("accounts", content);
             dispatcher.forward(request, response);
 
         } catch (Exception se) {
