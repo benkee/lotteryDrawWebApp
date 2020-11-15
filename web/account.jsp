@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
   User: johnmace
   Date: 21/10/2020
@@ -61,15 +61,23 @@
         <input type="number" id="nu6" name="nu6" min="0" max="60"><br>
         <button type="submit" value="Submit">Submit</button>
     </form>
-    <button onclick="generateNumbers()">Lucky Dip</button><br>
-    <form name="getDraws" method="post" action="GetUserNumbers">
+    <button onclick="generateNumbers()">Lucky Dip</button>
+    <div>    <form name="getDraws" method="post" action="GetUserNumbers">
         <button type="submit" value="Submit">Get Draws</button>
-    </form>
+    </form></div>
 </div>
 <div>
     <p>
-        <%=request.getAttribute("title")%>
-        <%=request.getAttribute("draws")%>
+        <%
+        if(request.getAttribute("title")!=null){
+        %>
+        <%=request.getAttribute("title")%><br>
+        <%ArrayList<String> data = (ArrayList<String>) request.getAttribute("draws");
+        for (int i=0; i<data.size(); i++){
+            %><%=data.get(i)%><%;%>
+            <br><%
+            }
+        }%>
     </p>
 </div>
 <a href="index.jsp">Home Page</a>

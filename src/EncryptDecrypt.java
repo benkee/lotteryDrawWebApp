@@ -13,7 +13,7 @@ public class EncryptDecrypt {
     protected PrivateKey privKey;
     protected static String encryptionAlgorithm = "RSA";
     protected static int encryptionKeyLen = 2048;
-    protected static String transformationS = "RSA/ECB/PKCS1Padding";
+    protected static String transformationS = "RSA";
 
     public EncryptDecrypt() throws NoSuchAlgorithmException {
         encryptAlgo = EncryptDecrypt.encryptionAlgorithm;

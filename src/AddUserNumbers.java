@@ -27,11 +27,16 @@ public class AddUserNumbers extends HttpServlet {
         String plaintext = numbers;
         try {
             EncryptDecrypt ED = new EncryptDecrypt();
-            KeyPair kp = ED.getKeyPair();
-            session.setAttribute("KeyPair", kp);
+            KeyPair kp =  null;
+            if (session.getAttribute("KeyPair")==null){
+                kp = ED.getKeyPair();
+                session.setAttribute("KeyPair", kp);
+            }else{
+                kp = (KeyPair) session.getAttribute("KeyPair");
+            }
+
             PublicKey pubKey = kp.getPublic();
             byte[] ciphertext = ED.encryptText(plaintext, pubKey);
-            System.out.println(ciphertext.length);
             String hp = (String) session.getAttribute("hashedPassword");
             try {
                 File dir = new File("CWLotteryWebApp");
@@ -43,7 +48,9 @@ public class AddUserNumbers extends HttpServlet {
                 stream.flush();
                 stream.close();
             } catch (IOException ex) {
-                System.out.println("Failed to create/write to file");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
+                request.setAttribute("message","Failed to create/read file");
+                dispatcher.forward(request,response);
             }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

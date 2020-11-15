@@ -26,17 +26,16 @@ public class GetUserNumbers extends HttpServlet {
             String hpS = hp.toString();
             File dir = new File("CWLotteryWebApp");
             File file = new File(dir,hpS.substring(0, 19));
-
             byte[] ciphertext = Files.readAllBytes(file.toPath());
-            System.out.println(Arrays.toString(ciphertext));
+
             List<byte[]> blocks = splitBytesArray(ciphertext);
+
             ArrayList<String> numbers = new ArrayList<String>();
+
             for(byte[] block:blocks){
                 String plaintext = new String(ED.decryptText(block, privKey));
-                System.out.println(plaintext);
                 numbers.add(plaintext);
             }
-            System.out.println(numbers);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
             request.setAttribute("draws", numbers);
             request.setAttribute("title", "Draw: ");
@@ -63,11 +62,11 @@ public class GetUserNumbers extends HttpServlet {
         List<byte[]> blocks = new ArrayList<byte[]>();
         int offset = 0;
         int blockLength = 256;
-
+        System.out.println();
         while(offset < fileBytes.length){
             byte[] byteBlock = new byte[blockLength];
             System.arraycopy(fileBytes,offset,byteBlock,0,blockLength);
-            offset += blockLength;
+            offset = offset + blockLength;
             blocks.add(byteBlock);
         }
         return blocks;
