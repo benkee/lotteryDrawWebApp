@@ -46,7 +46,7 @@ public class DisplayData extends HttpServlet {
 
             // create HTML table text
             String content = "<table border='1' cellspacing='2' cellpadding='2' width='100%' align='left'>" +
-                    "<tr><th>First name</th><th>Last name</th><th>Email</th><th>Phone number</th><th>Username</th><th>Password</th></tr>";
+                    "<tr><th>First name</th><th>Last name</th><th>Email</th><th>Phone number</th><th>Username</th><th>Role</th></tr>";
 
             // add HTML table data using data from database
 
@@ -55,7 +55,8 @@ public class DisplayData extends HttpServlet {
                         "<td>" + rs.getString("Lastname") + "</td>" +
                         "<td>" + rs.getString("Email") + "</td>" +
                         "<td>" + rs.getString("Phone") + "</td>" +
-                        "<td>" + rs.getString("Username") + "</td></tr";
+                        "<td>" + rs.getString("Username") + "</td>" +
+                        "<td>" + rs.getString("Role") + "</td></tr>";
             }
             // finish HTML table text
             content += "</table>";

@@ -12,8 +12,9 @@
 </head>
 <body>
 <div>
-    <form name="getDraws" method="post" action="GetUserNumbers">
-    <button type="submit" value="Submit">Get Draws</button>
+    <br>
+    <form name="getAccounts" method="post" action="DisplayData">
+    <button type="submit" value="Submit">Get Accounts</button>
     </form>
 </div>
     <%=request.getAttribute("accounts")%>

@@ -44,7 +44,15 @@ public class CreateAccount extends HttpServlet {
         String phone = request.getParameter("phone");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        String role = request.getParameter("role");
+        boolean isAdmin;
+        System.out.println(role);
+        if(role == "admin") {
+            isAdmin = true;
+        }else{
+            isAdmin = false;
+        }
+        session.setAttribute("admin", isAdmin);
         try {
             HashPassword.hashPassword(password);
         } catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -85,13 +93,21 @@ public class CreateAccount extends HttpServlet {
             conn.close();
 
             // display account.jsp page with given message if successful
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
-            request.setAttribute("message", firstname + ", you have successfully created an account");
-            request.setAttribute("firstname",session.getAttribute("firstname"));
-            request.setAttribute("lastname",session.getAttribute("lastname"));
-            request.setAttribute("username",session.getAttribute("username"));
-            request.setAttribute("email",session.getAttribute("email"));
-            dispatcher.forward(request, response);
+            if (isAdmin){
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
+                request.setAttribute("message", firstname + ", you have successfully created an account");
+                dispatcher.forward(request, response);
+            }else{
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
+                request.setAttribute("message", firstname + ", you have successfully created an account");
+                request.setAttribute("firstname",session.getAttribute("firstname"));
+                request.setAttribute("lastname",session.getAttribute("lastname"));
+                request.setAttribute("username",session.getAttribute("username"));
+                request.setAttribute("email",session.getAttribute("email"));
+                dispatcher.forward(request, response);
+            }
+
+
 
         } catch(Exception se){
             se.printStackTrace();

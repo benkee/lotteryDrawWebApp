@@ -133,6 +133,10 @@
     <input type="email" id="email" name="email"  placeholder="joebloggs@email.com"><br>
     <label for="password">Password:</label><br>
     <input type="password" id="password" name="password"  placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"><br>
+    <select id="role" name="role">
+        <option value="public">Public</option>
+        <option value="admin">Admin</option>
+    </select><br>
     <input type="submit" value="Submit">
 </form>
 </body>
