@@ -22,7 +22,6 @@ public class UserLogin extends HttpServlet {
         System.out.println("UL doPost");
         HttpSession session = request.getSession();
         int attempts = trackSession(session);
-        System.out.println(attempts);
         if (attempts < 3) {
             session.removeAttribute("firstname");
             session.removeAttribute("lastname");
@@ -62,6 +61,7 @@ public class UserLogin extends HttpServlet {
                 ArrayList<String> Firstnames = new ArrayList<String>();
                 ArrayList<String> Lastnames = new ArrayList<String>();
                 ArrayList<String> Emails = new ArrayList<String>();
+                ArrayList<String> Roles = new ArrayList<String>();
 
                 while (rs.next()) {
                     Usernames.add(rs.getString("Username"));
@@ -70,6 +70,7 @@ public class UserLogin extends HttpServlet {
                     Firstnames.add(rs.getString("Firstname"));
                     Lastnames.add(rs.getString("Lastname"));
                     Emails.add(rs.getString("Email"));
+                    Roles.add(rs.getString("Role"));
                 }
 
                 String[] usernameLog = request.getParameterValues("usernameLog");
@@ -83,6 +84,7 @@ public class UserLogin extends HttpServlet {
                         session.setAttribute("username", Usernames.get(i));
                         session.setAttribute("email", Emails.get(i));
                         session.setAttribute("hashedPassword", Passwords.get(i));
+                        session.setAttribute("role",Roles.get(i));
                         break;
                     }
                 }

@@ -1,3 +1,4 @@
+<%--suppress HtmlUnknownTarget --%>
 <%--
   Created by IntelliJ IDEA.
   User: Ben
@@ -9,6 +10,9 @@
 <html>
 <head>
     <title>Admin Home</title>
+    <%if(session.getAttribute("role").equals("public") || session.getAttribute("role").equals(null)){
+        response.sendRedirect("/web/index.jsp");
+    }%>
 </head>
 <body>
 <div>
@@ -17,6 +21,10 @@
     <button type="submit" value="Submit">Get Accounts</button>
     </form>
 </div>
-    <%=request.getAttribute("accounts")%>
+    <%if (request.getAttribute("accounts")!= null){%>
+<%=request.getAttribute("accounts")%><%}%>
+<br>
+<a href="${pageContext.request.contextPath}/LotteryWebApp/web/index.jsp">Home Page</a>
 </body>
+
 </html>

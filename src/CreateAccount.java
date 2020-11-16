@@ -45,14 +45,7 @@ public class CreateAccount extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
-        boolean isAdmin;
-        System.out.println(role);
-        if(role == "admin") {
-            isAdmin = true;
-        }else{
-            isAdmin = false;
-        }
-        session.setAttribute("admin", isAdmin);
+        session.setAttribute("role", role);
         try {
             HashPassword.hashPassword(password);
         } catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -74,8 +67,8 @@ public class CreateAccount extends HttpServlet {
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
             // Create sql query
-            String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd, Salt)"
-                    + " VALUES (?, ?, ?, ?, ?, ?,?)";
+            String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd, Salt, Role)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             System.out.println("Adding");
             // set values into SQL query statement
@@ -87,17 +80,18 @@ public class CreateAccount extends HttpServlet {
             stmt.setString(5,username);
             stmt.setString(6,hashedPassword);
             stmt.setString(7,salt);
+            stmt.setString(8,role);
 
             // execute query and close connection
             stmt.execute();
             conn.close();
 
             // display account.jsp page with given message if successful
-            if (isAdmin){
+            if (role.equals("admin")){
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
                 request.setAttribute("message", firstname + ", you have successfully created an account");
                 dispatcher.forward(request, response);
-            }else{
+            }else if(role.equals("public")){
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                 request.setAttribute("message", firstname + ", you have successfully created an account");
                 request.setAttribute("firstname",session.getAttribute("firstname"));

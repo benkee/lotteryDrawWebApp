@@ -65,7 +65,7 @@ public class DisplayData extends HttpServlet {
             conn.close();
             // display output.jsp page with given content above if successful
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/output.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
             request.setAttribute("accounts", content);
             dispatcher.forward(request, response);
 
