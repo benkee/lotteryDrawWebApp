@@ -70,7 +70,6 @@ public class CreateAccount extends HttpServlet {
             String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd, Salt, Role)"
                     + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-            System.out.println("Adding");
             // set values into SQL query statement
             stmt = conn.prepareStatement(query);
             stmt.setString(1,firstname);

@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.KeyPair;
@@ -15,10 +17,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "CheckDraws")
+@WebServlet("/CheckDraws")
 public class CheckDraws extends HttpServlet {
+
     private Connection conn;
     private Statement stmt;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         //access current http session
@@ -70,9 +74,11 @@ public class CheckDraws extends HttpServlet {
                 numbers.add(plaintext);
             }
             for(String number:numbers) {
-                System.out.println(number);
-                System.out.println(draw);
                 if(number.equals(draw)){
+                    FileWriter writer = new FileWriter(new File(dir,hpS.substring(0, 19)));
+                    writer.write("");
+                    writer.flush();
+                    writer.close();
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                     request.setAttribute("winMessage", "Congratulations, you have won!");
                     request.setAttribute("message","Successfully checked draw/s");
@@ -99,9 +105,7 @@ public class CheckDraws extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
             request.setAttribute("message", "File Error, No draws");
             dispatcher.forward(request, response);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -110,7 +114,6 @@ public class CheckDraws extends HttpServlet {
         List<byte[]> blocks = new ArrayList<byte[]>();
         int offset = 0;
         int blockLength = 256;
-        System.out.println();
         while(offset < fileBytes.length){
             byte[] byteBlock = new byte[blockLength];
             System.arraycopy(fileBytes,offset,byteBlock,0,blockLength);

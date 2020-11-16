@@ -24,7 +24,7 @@
     <%if (request.getAttribute("accounts")!= null){%>
 <%=request.getAttribute("accounts")%><%}%>
 <br>
-<a href="${pageContext.request.contextPath}/LotteryWebApp/web/index.jsp">Home Page</a>
+<a href="${pageContext.request.contextPath}/web/index.jsp">Home Page</a>
 </body>
 
 </html>

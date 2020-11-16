@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-@WebFilter(filterName = "FormFilter")
+@WebFilter("/FormFilter")
 public class FormFilter implements Filter {
-
-    public void init(FilterConfig config) throws ServletException {
+    public void init(FilterConfig config) {
         config.getServletContext().log("Filter Started");
     }
 
@@ -15,17 +14,16 @@ public class FormFilter implements Filter {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        System.out.println("Filtering");
         boolean invalid = false;
-        Map params = request.getParameterMap();
-
+        Map<String, String[]> params = request.getParameterMap();
+        System.out.println("params");
         if(params != null){
-            for (Object o : params.keySet()) {
-                String key = (String) o;
-                String[] values = (String[]) params.get(key);
-
-                for (String value : values) {
-                    if (checkChars(value)) {
+            Iterator iter = params.keySet().iterator();
+            while(iter.hasNext()){
+                String key = (String) iter.next();
+                String[] values = params.get(key);
+                for(int i=0; i < values.length; i++){
+                    if(checkChars(values[i])){
                         invalid = true;
                         break;
                     }
@@ -40,12 +38,11 @@ public class FormFilter implements Filter {
                         ex.printStackTrace();
                     }
                 } else {
-                    chain.doFilter(request, response);
+                    break;
                 }
             }
-            }
-        chain.doFilter(request,response);
-        }
+        }chain.doFilter(request,response);
+    }
 
 
 

@@ -83,7 +83,9 @@
         }%>
     </p>
     <br>
-    <form name="getWDraw" method="post" action="${pageContext.request.contextPath}/LotteryWebApp/src/CheckDraws">
+</div>
+<div>
+<form name="getWDraw" method="post" action="CheckDraws">
     <button type="submit" value="Submit">Check Draws</button>
     </form>
     <%if (request.getAttribute("winMessage")!= null){%>
