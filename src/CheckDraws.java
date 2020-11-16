@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,9 +18,6 @@ import java.util.List;
 
 @WebServlet("/CheckDraws")
 public class CheckDraws extends HttpServlet {
-
-    private Connection conn;
-    private Statement stmt;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -44,8 +40,8 @@ public class CheckDraws extends HttpServlet {
         try {
             // create database connection and statement
             Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            stmt = conn.createStatement();
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
 
             // query database and get results
             ResultSet rs = stmt.executeQuery("SELECT * FROM winningDraw");
@@ -111,7 +107,7 @@ public class CheckDraws extends HttpServlet {
     }
     private List<byte[]> splitBytesArray(byte[] fileBytes){
 
-        List<byte[]> blocks = new ArrayList<byte[]>();
+        List<byte[]> blocks = new ArrayList<>();
         int offset = 0;
         int blockLength = 256;
         while(offset < fileBytes.length){
@@ -124,6 +120,6 @@ public class CheckDraws extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request,response);
     }
 }

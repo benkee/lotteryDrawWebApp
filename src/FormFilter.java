@@ -16,7 +16,6 @@ public class FormFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         boolean invalid = false;
         Map<String, String[]> params = request.getParameterMap();
-        System.out.println("params");
         if(params != null){
             Iterator iter = params.keySet().iterator();
             while(iter.hasNext()){

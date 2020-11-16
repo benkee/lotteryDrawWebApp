@@ -30,7 +30,7 @@ public class GetUserNumbers extends HttpServlet {
 
             List<byte[]> blocks = splitBytesArray(ciphertext);
 
-            ArrayList<String> numbers = new ArrayList<String>();
+            ArrayList<String> numbers = new ArrayList<>();
 
             for(byte[] block:blocks){
                 String plaintext = new String(ED.decryptText(block, privKey));

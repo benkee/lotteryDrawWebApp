@@ -18,23 +18,12 @@ public class EncryptDecrypt {
     public EncryptDecrypt() throws NoSuchAlgorithmException {
         encryptAlgo = EncryptDecrypt.encryptionAlgorithm;
         keyLength = EncryptDecrypt.encryptionKeyLen;
-        transformation = EncryptDecrypt.transformationS;
-    }
-    public static BigInteger keyToNum(byte[] byteArray){
-        return new BigInteger(1, byteArray);
-    }
-    public String getEncryptAlgo(){
-        return encryptAlgo;
-    }
-    public int getKeyLength(){
-        return keyLength;
-    }
-    public String getTransformation(){
-        return transformation;
-    }
-    public PublicKey getPubKey(){
-        return pubKey;
-    }
+        transformation = EncryptDecrypt.transformationS; }
+    public static BigInteger keyToNum(byte[] byteArray){ return new BigInteger(1, byteArray); }
+    public String getEncryptAlgo(){ return encryptAlgo; }
+    public int getKeyLength(){ return keyLength; }
+    public String getTransformation(){ return transformation; }
+    public PublicKey getPubKey(){ return pubKey; }
     public byte[] getPubKeyAsByteArray(){
         return pubKey.getEncoded();
     }

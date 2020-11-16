@@ -8,17 +8,14 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 
 @WebServlet("/AddUserNumbers")
 public class AddUserNumbers extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        System.out.println("GUN doPost");
         String numbers = "";
         for (int i = 1; i < 6; i++) {
             numbers += request.getParameter("nu" + String.valueOf(i)) + ",";
@@ -60,5 +57,6 @@ public class AddUserNumbers extends HttpServlet {
         dispatcher.forward(request,response);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
     }
 }
