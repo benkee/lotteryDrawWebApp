@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/GetUserNumbers")
 public class GetUserNumbers extends HttpServlet {
@@ -38,7 +38,7 @@ public class GetUserNumbers extends HttpServlet {
             }
             RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
             request.setAttribute("draws", numbers);
-            request.setAttribute("title", "Draw: ");
+            request.setAttribute("drawsTitle", "Draw: ");
             request.setAttribute("message","Successfully returned draw/s");
             dispatcher.forward(request,response);
 
@@ -62,7 +62,6 @@ public class GetUserNumbers extends HttpServlet {
         List<byte[]> blocks = new ArrayList<byte[]>();
         int offset = 0;
         int blockLength = 256;
-        System.out.println();
         while(offset < fileBytes.length){
             byte[] byteBlock = new byte[blockLength];
             System.arraycopy(fileBytes,offset,byteBlock,0,blockLength);

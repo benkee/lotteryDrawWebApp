@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.KeyPair;
@@ -69,15 +68,15 @@ public class CheckDraws extends HttpServlet {
                 String plaintext = new String(ED.decryptText(block, privKey));
                 numbers.add(plaintext);
             }
+            File deletingFile = new File(dir,hpS.substring(0, 19));
+            deletingFile.delete();
+            request.setAttribute("drawsTitle",null);
             for(String number:numbers) {
                 if(number.equals(draw)){
-                    FileWriter writer = new FileWriter(new File(dir,hpS.substring(0, 19)));
-                    writer.write("");
-                    writer.flush();
-                    writer.close();
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
-                    request.setAttribute("winMessage", "Congratulations, you have won!");
+                    request.setAttribute("winMessage", "Congratulations! You have won with the  draw: " + number);
                     request.setAttribute("message","Successfully checked draw/s");
+
                     dispatcher.forward(request,response);
                     break;
                 }

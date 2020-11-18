@@ -9,10 +9,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Admin Home</title>
-    <%if(session.getAttribute("role").equals("public") || session.getAttribute("role").equals(null)){
+    <%if(session.getAttribute("role").equals("public") || session.getAttribute("role") == null){
         response.sendRedirect("/web/index.jsp");
     }%>
+    <title>Admin Home</title>
 </head>
 <body>
 <div>

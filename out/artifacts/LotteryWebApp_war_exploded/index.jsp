@@ -21,6 +21,9 @@
             margin-bottom: 10px;
         }
     </style>
+    <%
+        System.out.println(session.getAttributeNames());
+    %>
     <script type="text/javascript">
         function validateAccountForm(){
             var fname = document.forms["createaccount"][0].value;

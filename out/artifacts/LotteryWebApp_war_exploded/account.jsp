@@ -64,7 +64,7 @@
         <input type="number" id="nu6" name="nu6" min="0" max="60"><br>
         <button type="submit" value="Submit">Submit</button>
     </form>
-    <button onclick="generateNumbers()">Lucky Dip</button>
+    <button onclick="generateNumbers()">Lucky Dip</button><br>
     <div>    <form name="getDraws" method="post" action="GetUserNumbers">
         <button type="submit" value="Submit">Get Draws</button>
     </form></div>
@@ -72,22 +72,23 @@
 <div>
     <p>
         <%
-        if(request.getAttribute("title")!=null){
+        if(request.getAttribute("drawsTitle")!=null){
         %>
-        <%=request.getAttribute("title")%><br>
+        <%=request.getAttribute("drawsTitle")%><br>
         <%ArrayList<String> data = (ArrayList<String>) request.getAttribute("draws");
         for (int i=0; i<data.size(); i++){
             %><%=data.get(i)%><%;%>
             <br><%
-            }
+            }%>
+        <form name="getWDraw" method="post" action="CheckDraws">
+            <button type="submit" value="Submit">Check Draws</button>
+        </form><%
         }%>
     </p>
     <br>
 </div>
 <div>
-<form name="getWDraw" method="post" action="CheckDraws">
-    <button type="submit" value="Submit">Check Draws</button>
-    </form>
+
     <%if (request.getAttribute("winMessage")!= null){%>
     <%=request.getAttribute("winMessage")%><%}%>
 </div>

@@ -15,7 +15,6 @@ public class DisplayData extends HttpServlet {
     private Statement stmt;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("DD doPost");
         HttpSession session = request.getSession();
         //access current http session
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";

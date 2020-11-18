@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.*;
+import java.util.ArrayList;
 
 @WebServlet("/CreateAccount")
 public class CreateAccount extends HttpServlet {
@@ -19,7 +20,6 @@ public class CreateAccount extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        System.out.println("CA doPost");
         // MySql database connection info
         String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "user";
@@ -83,9 +83,23 @@ public class CreateAccount extends HttpServlet {
 
             // execute query and close connection
             stmt.execute();
-            conn.close();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM userAccounts");
 
+            // add HTML table data using data from database
+            ArrayList<String> Usernames = new ArrayList<String>();
+            while (rs.next()) {
+                Usernames.add(rs.getString("Username"));
+            }
+            conn.close();
             // display account.jsp page with given message if successful
+            boolean createAccount = true;
+            for (String s : Usernames) {
+                if (username.equals(s)) {
+                    createAccount = false;
+                    break;
+                }
+            }
+            if (createAccount){
             if (role.equals("admin")){
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
                 request.setAttribute("message", firstname + ", you have successfully created an account");
@@ -98,9 +112,12 @@ public class CreateAccount extends HttpServlet {
                 request.setAttribute("username",session.getAttribute("username"));
                 request.setAttribute("email",session.getAttribute("email"));
                 dispatcher.forward(request, response);
+            }}
+        else{
+                RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
+                request.setAttribute("message", username + " is already in use.");
+                dispatcher.forward(request, response);
             }
-
-
 
         } catch(Exception se){
             se.printStackTrace();
