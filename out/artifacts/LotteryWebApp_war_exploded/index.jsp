@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.Enumeration" %><%--
   Created by IntelliJ IDEA.
   User: johnmace
   Date: 21/10/2020
@@ -22,7 +22,14 @@
         }
     </style>
     <%
-        System.out.println(session.getAttributeNames());
+        Enumeration<String> list;
+        list = session.getAttributeNames();
+        session.removeAttribute("firstname");
+        session.removeAttribute("lastname");
+        session.removeAttribute("username");
+        session.removeAttribute("email");
+        session.removeAttribute("hashedPassword");
+        System.out.println(list);
     %>
     <script type="text/javascript">
         function validateAccountForm(){

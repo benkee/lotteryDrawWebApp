@@ -16,6 +16,7 @@ public class CreateAccount extends HttpServlet {
 
     private Connection conn;
     private PreparedStatement stmt;
+    private Statement statement;
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,41 +66,45 @@ public class CreateAccount extends HttpServlet {
             // create database connection and statement
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-
-            // Create sql query
-            String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd, Salt, Role)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-            // set values into SQL query statement
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1,firstname);
-            stmt.setString(2,lastname);
-            stmt.setString(3,email);
-            stmt.setString(4,phone);
-            stmt.setString(5,username);
-            stmt.setString(6,hashedPassword);
-            stmt.setString(7,salt);
-            stmt.setString(8,role);
-
-            // execute query and close connection
-            stmt.execute();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM userAccounts");
-
-            // add HTML table data using data from database
+            statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM userAccounts");
             ArrayList<String> Usernames = new ArrayList<String>();
             while (rs.next()) {
                 Usernames.add(rs.getString("Username"));
             }
-            conn.close();
+
             // display account.jsp page with given message if successful
             boolean createAccount = true;
             for (String s : Usernames) {
                 if (username.equals(s)) {
+                    System.out.println(username + s);
                     createAccount = false;
                     break;
                 }
             }
             if (createAccount){
+                // Create sql query
+                String query = "INSERT INTO userAccounts (Firstname, Lastname, Email, Phone, Username, Pwd, Salt, Role)"
+                        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+                // set values into SQL query statement
+                stmt = conn.prepareStatement(query);
+                stmt.setString(1,firstname);
+                stmt.setString(2,lastname);
+                stmt.setString(3,email);
+                stmt.setString(4,phone);
+                stmt.setString(5,username);
+                stmt.setString(6,hashedPassword);
+                stmt.setString(7,salt);
+                stmt.setString(8,role);
+
+                // execute query and close connection
+                stmt.execute();
+
+
+                // add HTML table data using data from database
+
+                conn.close();
             if (role.equals("admin")){
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
                 request.setAttribute("message", firstname + ", you have successfully created an account");
@@ -112,10 +117,11 @@ public class CreateAccount extends HttpServlet {
                 request.setAttribute("username",session.getAttribute("username"));
                 request.setAttribute("email",session.getAttribute("email"));
                 dispatcher.forward(request, response);
-            }}
-        else{
+            }
+        }else{
+                conn.close();
                 RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-                request.setAttribute("message", username + " is already in use.");
+                request.setAttribute("message", "The username '" + username + "' is already in use.");
                 dispatcher.forward(request, response);
             }
 
@@ -131,7 +137,8 @@ public class CreateAccount extends HttpServlet {
                 if(stmt!=null)
                     stmt.close();
             }
-            catch(SQLException se2){}
+            catch(SQLException se2)
+            {se2.printStackTrace();}
             try{
                 if(conn!=null)
                     conn.close();

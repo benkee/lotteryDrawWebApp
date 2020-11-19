@@ -23,7 +23,13 @@
     </style>
     <%
         Enumeration<String> list;
-        System.out.println(list = session.getAttributeNames());
+        list = session.getAttributeNames();
+        session.removeAttribute("firstname");
+        session.removeAttribute("lastname");
+        session.removeAttribute("username");
+        session.removeAttribute("email");
+        session.removeAttribute("hashedPassword");
+        System.out.println(list);
     %>
     <script type="text/javascript">
         function validateAccountForm(){

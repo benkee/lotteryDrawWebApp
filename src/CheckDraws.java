@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -96,12 +97,15 @@ public class CheckDraws extends HttpServlet {
 
         }catch(NullPointerException e){
             e.printStackTrace();
-
             RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
             request.setAttribute("message", "File Error, No draws");
             dispatcher.forward(request, response);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+        }catch(NoSuchFileException e){
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
+            request.setAttribute("message", "File Error, No draws");
+            dispatcher.forward(request, response);
         }
     }
     private List<byte[]> splitBytesArray(byte[] fileBytes){

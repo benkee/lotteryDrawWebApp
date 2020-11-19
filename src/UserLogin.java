@@ -20,11 +20,6 @@ public class UserLogin extends HttpServlet {
         HttpSession session = request.getSession();
         int attempts = trackSession(session);
         if (attempts < 3) {
-            session.removeAttribute("firstname");
-            session.removeAttribute("lastname");
-            session.removeAttribute("username");
-            session.removeAttribute("email");
-            session.removeAttribute("hashedPassword");
             //access current http session
             String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
             String USER = "user";
