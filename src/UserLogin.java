@@ -19,8 +19,6 @@ public class UserLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         int attempts = trackSession(session);
-        System.out.println(attempts);
-        System.out.println(session.getAttribute("loginAccount"));
         if (attempts < 3) {
             //access current http session
             String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
