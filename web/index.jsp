@@ -22,14 +22,16 @@
         }
     </style>
     <%
-        Enumeration<String> list;
-        list = session.getAttributeNames();
+/*        Enumeration<String> list = session.getAttributeNames();
+        while (list.hasMoreElements()) {
+            String attribute = (String) list.nextElement();
+            System.out.println(attribute+" : "+session.getAttribute(attribute));
+        }*/
         session.removeAttribute("firstname");
         session.removeAttribute("lastname");
         session.removeAttribute("username");
         session.removeAttribute("email");
         session.removeAttribute("hashedPassword");
-        System.out.println(list);
     %>
     <script type="text/javascript">
         function validateAccountForm(){

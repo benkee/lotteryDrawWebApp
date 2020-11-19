@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -42,17 +43,8 @@ public class GetUserNumbers extends HttpServlet {
             request.setAttribute("message","Successfully returned draw/s");
             dispatcher.forward(request,response);
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
-            request.setAttribute("message", "File Error, Please try again");
-            dispatcher.forward(request, response);
-
-        }catch(NullPointerException e){
-            e.printStackTrace();
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
+        } catch (NoSuchAlgorithmException | NullPointerException | NoSuchFileException e) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
             request.setAttribute("message", "File Error, No draws");
             dispatcher.forward(request, response);
         }

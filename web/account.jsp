@@ -65,9 +65,9 @@
         <button type="submit" value="Submit">Submit</button>
     </form>
     <button onclick="generateNumbers()">Lucky Dip</button><br>
-    <div>    <form name="getDraws" method="post" action="GetUserNumbers">
+    <form name="getDraws" method="post" action="GetUserNumbers">
         <button type="submit" value="Submit">Get Draws</button>
-    </form></div>
+    </form>
 </div>
 <div>
     <p>

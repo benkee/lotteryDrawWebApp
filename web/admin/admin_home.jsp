@@ -12,10 +12,11 @@
     <%if(session.getAttribute("role").equals("public") || session.getAttribute("role") == null){
         response.sendRedirect("/web/index.jsp");
     }%>
-    <title>Admin Home</title>
+    <title></title>
 </head>
 <body>
 <div>
+    <h1>Admin Home</h1>
     <br>
     <form name="getAccounts" method="post" action="DisplayData">
     <button type="submit" value="Submit">Get Accounts</button>
@@ -24,7 +25,6 @@
     <%if (request.getAttribute("accounts")!= null){%>
 <%=request.getAttribute("accounts")%><%}%>
 <br>
-<a href="${pageContext.request.contextPath}/web/index.jsp">Home Page</a>
+<a href="index.jsp">Home Page</a>
 </body>
-
 </html>
