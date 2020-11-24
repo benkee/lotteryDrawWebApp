@@ -85,9 +85,15 @@ public class UserLogin extends HttpServlet {
                 // display output.jsp page with given content above if successful
                 if (Access) {
                     session.setAttribute("loginCount",null);
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
-                    request.setAttribute("message", "Login Successful");
-                    dispatcher.forward(request, response);
+                    if(session.getAttribute("role")=="public"){
+                        RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
+                        request.setAttribute("message", "Login Successful");
+                        dispatcher.forward(request, response);}
+                    else if(session.getAttribute("role")=="admin") {
+                        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
+                        request.setAttribute("message", "Login Successful");
+                        dispatcher.forward(request, response);}
+                    }
                 } else {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
                     request.setAttribute("message", "Unsuccessful Login Attempt, " + (3-attempts) + " remaining.");
