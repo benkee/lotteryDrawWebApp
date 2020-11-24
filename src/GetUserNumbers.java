@@ -50,7 +50,6 @@ public class GetUserNumbers extends HttpServlet {
         }
     }
     private List<byte[]> splitBytesArray(byte[] fileBytes){
-
         List<byte[]> blocks = new ArrayList<byte[]>();
         int offset = 0;
         int blockLength = 256;

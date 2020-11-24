@@ -1,38 +1,26 @@
 <%@ page import="java.util.Enumeration" %><%--
   Created by IntelliJ IDEA.
-  User: johnmace
+  User: Ben
   Date: 21/10/2020
   Time: 15:57
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Home</title>
-    <style>
-        form label {
-            display: inline-block;
-            width: 100px;
-            color: green;
-        }
-
-        form div {
-            margin-bottom: 10px;
-        }
-    </style>
+    <!--The session attributes are removes so every time user is on the index page they cannot get back into
+     the accounts or admin page -->
     <%
-/*        Enumeration<String> list = session.getAttributeNames();
-        while (list.hasMoreElements()) {
-            String attribute = (String) list.nextElement();
-            System.out.println(attribute+" : "+session.getAttribute(attribute));
-        }*/
         session.removeAttribute("firstname");
         session.removeAttribute("lastname");
         session.removeAttribute("username");
         session.removeAttribute("email");
         session.removeAttribute("hashedPassword");
+        session.removeAttribute("role");
     %>
+    <!--These function gets all the values from the form when the user presses submit then checks if they match
+       the appropriate regular expression, if the inserted data is allowed, the form is submitted, and vice versa-->
     <script type="text/javascript">
         function validateAccountForm(){
             var fname = document.forms["createaccount"][0].value;
@@ -79,8 +67,7 @@
                 alert("Invalid phone number, must in format xx-xxxx-xxxxxxx");
                 return false;
             }
-            //REGEX = /\A[a-z0-9!#$%&'*+=?^_‘{|}~-]+(?:.[a-z0-9!#$%&'*+=?^_‘{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z/;
-            REGEX = /[\s\S]*/;
+            REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             var regtest = new RegExp(REGEX);
             result = regtest.test(email);
             if (!result){
@@ -122,7 +109,8 @@
         %>
             <%= request.getAttribute("message") %><br>
         <%}%>
-<div/>
+<div/><!--These are forms where the user inputs information, on submit they do the doPost in the java servlet,
+        named in action -->
 <h2>Login:</h2>
 <form name="login" onsubmit="return validateLoginForm()" method="post" action="UserLogin">
     <label for="usernameLog">Username:</label><br>

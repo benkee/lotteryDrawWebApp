@@ -12,13 +12,13 @@ import java.util.ArrayList;
 
 @WebServlet("/UserLogin")
 public class UserLogin extends HttpServlet {
-
     private Connection conn;
     private Statement stmt;
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         int attempts = trackSession(session);
+        //gets the current session's login attempts, if they are less than 3, runs the code to login, if not the session
+        //is invalidated so the user can no longer use the forms without restarting the session.
         if (attempts < 3) {
             //access current http session
             String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -46,7 +46,7 @@ public class UserLogin extends HttpServlet {
                 // query database and get results
                 ResultSet rs = stmt.executeQuery("SELECT * FROM userAccounts");
 
-                // add HTML table data using data from database
+                // creates arrays for every column in the accounts database
                 ArrayList<String> Usernames = new ArrayList<String>();
                 ArrayList<String> Passwords = new ArrayList<String>();
                 ArrayList<String> Salts = new ArrayList<String>();
@@ -56,6 +56,7 @@ public class UserLogin extends HttpServlet {
                 ArrayList<String> Roles = new ArrayList<String>();
 
                 while (rs.next()) {
+                    //adds the values for each row into their associated columns(values)
                     Usernames.add(rs.getString("Username"));
                     Passwords.add(rs.getString("Pwd"));
                     Salts.add(rs.getString("Salt"));
@@ -64,7 +65,9 @@ public class UserLogin extends HttpServlet {
                     Emails.add(rs.getString("Email"));
                     Roles.add(rs.getString("Role"));
                 }
-
+                //gets the values from the login form for username login and compares them to every username and
+                //password combination in the accounts database, if the hashed password entered in the login form
+                //matches a hashed password in the database, access is granted and the session attributes are set
                 String[] usernameLog = request.getParameterValues("usernameLog");
                 String[] passwordLog = request.getParameterValues("passwordLog");
                 boolean Access = false;
@@ -82,14 +85,16 @@ public class UserLogin extends HttpServlet {
                 }
                 // close connection
                 conn.close();
-                // display output.jsp page with given content above if successful
+                // if access is true; resets the login counter due to successful login, if the role of the user is
+                // admin, they are forwarded to the admin page, if they are public they are forwarded to their account
+                // page, if access is not true, the login count is incremented and the user is sent back to the homepage
                 if (Access) {
                     session.setAttribute("loginCount",null);
-                    if(session.getAttribute("role")=="public"){
+                    if(session.getAttribute("role").equals("public")){
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                         request.setAttribute("message", "Login Successful");
                         dispatcher.forward(request, response);}
-                    if(session.getAttribute("role")=="admin") {
+                    if(session.getAttribute("role").equals("admin")) {
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
                         request.setAttribute("message", "Login Successful");
                         dispatcher.forward(request, response);}
@@ -98,13 +103,14 @@ public class UserLogin extends HttpServlet {
                     request.setAttribute("message", "Unsuccessful Login Attempt, " + (3-attempts) + " remaining.");
                     dispatcher.forward(request, response);
                 }
-
+                //if there are any errors with the database the user is returned to the home page
             } catch (Exception se) {
                 se.printStackTrace();
                 // display error.jsp page with given message if successful
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
                 request.setAttribute("message", "Database Error, Please try again");
                 dispatcher.forward(request, response);
+                //if there are statements ot connections which are open, they are closed here.
             } finally {
                 try {
                     if (stmt != null)
@@ -121,12 +127,15 @@ public class UserLogin extends HttpServlet {
             }
         }else{
             session.invalidate();
+            System.out.println("Session Invalidated");
         }
 }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
+    // this function created a login count if there is not one in the current session, however if there is, it is
+    // incremented by 1
     protected int trackSession(HttpSession session){
         int loginCount = 0;
         if(session.getAttribute("loginCount")==null){

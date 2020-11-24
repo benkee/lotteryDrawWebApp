@@ -1,14 +1,17 @@
 <%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
-  User: johnmace
+  User: Ben
   Date: 21/10/2020
   Time: 16:05
-  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Account</title>
+    <!--Here generateNumbers is called when the lucky dip button is pressed, this loops 6 times adding the return
+    value of getSecureRandInt to a field in the form until the form is full. In getSecureRandInt a randomly secure
+    integer is created, if it is less than 0 or greater than 60, the function calls itself recursively until
+    the number is between 0 and 60.-->
     <script type="text/javascript">
         function generateNumbers(){
             for (var i=0; i<6; i++) {
@@ -36,6 +39,7 @@
 </head>
 <body>
 <h1>User Account</h1>
+    <!--If the current session role is not valid the user is returned to the home page-->
     <%if(session.getAttribute("role").equals("admin") || session.getAttribute("role") == null){
         response.sendRedirect("index.jsp");
     }%>
@@ -70,6 +74,8 @@
     </form>
 </div>
 <div>
+    <!--This gets the array of the draws from the request attribute and loops through the array and displays the draw/s
+     on the page with spaces in between, if there are draws to be displayed-->
     <p>
         <%
         if(request.getAttribute("drawsTitle")!=null){
@@ -88,7 +94,6 @@
     <br>
 </div>
 <div>
-
     <%if (request.getAttribute("winMessage")!= null){%>
     <%=request.getAttribute("winMessage")%><%}%>
 </div>
