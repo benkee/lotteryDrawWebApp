@@ -10,10 +10,10 @@ import java.sql.*;
 
 @WebServlet("/DisplayData")
 public class DisplayData extends HttpServlet {
-
+    // defines some class variables
     private Connection conn;
     private Statement stmt;
-
+    // called from a form/button in a jsp with action post to 'DisplayData'
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         //access current http session
@@ -61,8 +61,7 @@ public class DisplayData extends HttpServlet {
 
             // close connection
             conn.close();
-            // display output.jsp page with given content above if successful
-
+            // display admin_home.jsp page with given content above if successful
             RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/admin_home.jsp");
             request.setAttribute("accounts", content);
             dispatcher.forward(request, response);
@@ -86,10 +85,5 @@ public class DisplayData extends HttpServlet {
                 se.printStackTrace();
             }
         }
-    }
-
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
     }
 }

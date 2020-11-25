@@ -18,7 +18,6 @@ import java.util.List;
 
 @WebServlet("/CheckDraws")
 public class CheckDraws extends HttpServlet {
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         //access current http session
@@ -47,68 +46,70 @@ public class CheckDraws extends HttpServlet {
             ResultSet rs = stmt.executeQuery("SELECT * FROM winningDraw");
             String draw = null;
             while (rs.next()) {
-                draw =  rs.getString("Draw");
+                draw = rs.getString("Draw");
             }
             // close connection
             conn.close();
-            // display output.jsp page with given content above if successful
+            // an instance of the EncryptDecrypt class is created and the key pair and hashed password are retrieved
+            // from the session, then the file named as the first 20 characters of the hashed password is read.
             EncryptDecrypt ED = new EncryptDecrypt();
             KeyPair kp = (KeyPair) session.getAttribute("KeyPair");
             PrivateKey privKey = kp.getPrivate();
             Object hp = session.getAttribute("hashedPassword");
             String hpS = hp.toString();
             File dir = new File("CWLotteryWebApp");
-            File file = new File(dir,hpS.substring(0, 19));
+            File file = new File(dir, hpS.substring(0, 19));
             byte[] ciphertext = Files.readAllBytes(file.toPath());
 
             List<byte[]> blocks = splitBytesArray(ciphertext);
 
             ArrayList<String> numbers = new ArrayList<String>();
-
-            for(byte[] block:blocks){
+            // for every block in the byte array, each block is decrypted to plain text and added to a string array
+            for (byte[] block : blocks) {
                 String plaintext = new String(ED.decryptText(block, privKey));
                 numbers.add(plaintext);
             }
-            File deletingFile = new File(dir,hpS.substring(0, 19));
+            // once the data from the file is read, the file is deleted
+            File deletingFile = new File(dir, hpS.substring(0, 19));
             deletingFile.delete();
-            request.setAttribute("drawsTitle",null);
-            for(String number:numbers) {
-                if(number.equals(draw)){
+            request.setAttribute("drawsTitle", null);
+            // draws are compared to draw in the database, if the users draw matched the draw, the user is returned to
+            // the account page with the given messages
+            for (String number : numbers) {
+                if (number.equals(draw)) {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
                     request.setAttribute("winMessage", "Congratulations! You have won with the  draw: " + number);
-                    request.setAttribute("message","Successfully checked draw/s");
+                    request.setAttribute("message", "Successfully checked draw/s");
 
-                    dispatcher.forward(request,response);
+                    dispatcher.forward(request, response);
                     break;
                 }
             }
+            // if the user's draws do not match the draw, they are returned to the account page with the given messages
             RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
             request.setAttribute("winMessage", "Unlucky, you have not won");
-            request.setAttribute("message","Successfully checked draw/s");
-            dispatcher.forward(request,response);
-
+            request.setAttribute("message", "Successfully checked draw/s");
+            dispatcher.forward(request, response);
 
         } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException | NullPointerException | NoSuchFileException e) {
+            // if there is an error, user is thrown to error page with a message
             RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
-            request.setAttribute("message", "File Error, Please try again");
+            request.setAttribute("message", "Error, Please try again");
             dispatcher.forward(request, response);
         }
     }
-    private List<byte[]> splitBytesArray(byte[] fileBytes){
 
+    private List<byte[]> splitBytesArray(byte[] fileBytes) {
+        // splits a large byte into smaller block and returns this as a byte array
         List<byte[]> blocks = new ArrayList<>();
         int offset = 0;
         int blockLength = 256;
-        while(offset < fileBytes.length){
+        while (offset < fileBytes.length) {
             byte[] byteBlock = new byte[blockLength];
-            System.arraycopy(fileBytes,offset,byteBlock,0,blockLength);
+            System.arraycopy(fileBytes, offset, byteBlock, 0, blockLength);
             offset = offset + blockLength;
             blocks.add(byteBlock);
         }
         return blocks;
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request,response);
     }
 }

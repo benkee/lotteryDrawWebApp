@@ -16,12 +16,15 @@ import java.security.PublicKey;
 public class AddUserNumbers extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        // creates a string of the draw from the request parameters that were forwarded and entered by the user
         String numbers = "";
         for (int i = 1; i < 6; i++) {
             numbers += request.getParameter("nu" + String.valueOf(i)) + ",";
         }
         numbers += request.getParameter("nu6");
         String plaintext = numbers;
+        // creates an instance of the EncryptDecrypt class then creates a new key pair if there is not one as a current
+        // session parameter
         try {
             EncryptDecrypt ED = new EncryptDecrypt();
             KeyPair kp =  null;
@@ -31,7 +34,9 @@ public class AddUserNumbers extends HttpServlet {
             }else{
                 kp = (KeyPair) session.getAttribute("KeyPair");
             }
-
+            // the draw entered by the user is then encrypted and written to a file with the name as the first 20
+            // characters of the users hashed password, the file is created in the directory 'CWLotteryWebApp', if
+            // neither the file or directory exists, they are both created
             PublicKey pubKey = kp.getPublic();
             byte[] ciphertext = ED.encryptText(plaintext, pubKey);
             String hp = (String) session.getAttribute("hashedPassword");
@@ -45,6 +50,7 @@ public class AddUserNumbers extends HttpServlet {
                 stream.flush();
                 stream.close();
             } catch (IOException ex) {
+                // if there is an error the user is thrown to the error page with the given message
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/error.jsp");
                 request.setAttribute("message","Failed to create/read file");
                 dispatcher.forward(request,response);
@@ -52,11 +58,9 @@ public class AddUserNumbers extends HttpServlet {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        // if the draw is correctly added to the file, the user is returned to the account page with the given message
         RequestDispatcher dispatcher = request.getRequestDispatcher("/account.jsp");
         request.setAttribute("message","Successfully Submitted Draw");
         dispatcher.forward(request,response);
-    }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
     }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class UserLogin extends HttpServlet {
     private Connection conn;
     private Statement stmt;
+    // called from a form/button in a jsp with action post to 'GetUserNumbers'
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         int attempts = trackSession(session);
@@ -130,10 +131,6 @@ public class UserLogin extends HttpServlet {
             System.out.println("Session Invalidated");
         }
 }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
-    }
     // this function created a login count if there is not one in the current session, however if there is, it is
     // incremented by 1
     protected int trackSession(HttpSession session){
