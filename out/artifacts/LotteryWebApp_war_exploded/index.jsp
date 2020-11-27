@@ -32,28 +32,28 @@
             var REGEX;
             var result;
             REGEX = /^[a-zA-Z]+$/;
-            var regtest = new RegExp(REGEX)
+            var regtest = new RegExp(REGEX);
             result = regtest.test(fname);
             if (!result){
                 alert("Invalid first name, must be letters only");
                 return false;
             }
             REGEX = /^[a-zA-Z]+$/;
-            var regtest = new RegExp(REGEX)
+            var regtest = new RegExp(REGEX);
             result = regtest.test(lname);
             if (!result){
                 alert("Invalid last name, must be letters only");
                 return false;
             }
             REGEX = /^[a-zA-Z0-9.-_]+$/;
-            var regtest = new RegExp(REGEX)
+            var regtest = new RegExp(REGEX);
             result = regtest.test(username);
             if (!result){
                 alert("Invalid username, must be letters/numbers/.-_ only");
                 return false;
             }
             REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
-            var regtest = new RegExp(REGEX)
+            var regtest = new RegExp(REGEX);
             result = regtest.test(password);
             if (!result){
                 alert("Invalid password, must be between 8 and 15 characters with at least" +
@@ -61,7 +61,7 @@
                 return false;
             }
             REGEX = /^([\d]{2}(-)[\d]{4}(-)[\d]{7})$/;
-            var regtest = new RegExp(REGEX)
+            var regtest = new RegExp(REGEX);
             result = regtest.test(phone);
             if (!result){
                 alert("Invalid phone number, must in format xx-xxxx-xxxxxxx");
@@ -71,7 +71,6 @@
             var regtest = new RegExp(REGEX);
             result = regtest.test(email);
             if (!result){
-                alert(email);
                 alert("Invalid email, must be a valid email address");
                 return false;
             }
@@ -83,14 +82,14 @@
             var username = document.forms["login"][0].value;
             var password = document.forms["login"][1].value;
             REGEX = /^[a-zA-Z0-9.-_]+$/;
-            var regtest = new RegExp(REGEX)
+            var regtest = new RegExp(REGEX);
             result = regtest.test(username);
             if (!result){
                 alert("Invalid username, must be letters/numbers/.-_ only");
                 return false;
             }
             REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/;
-            var regtest = new RegExp(REGEX)
+            var regtest = new RegExp(REGEX);
             result = regtest.test(password);
             if (!result){
                 alert("Invalid password, must be between 8 and 15 characters with at least" +
